@@ -142,3 +142,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 /drink-store-ui/.vscode
+/drink-store-api/.vs
+/drink-store-api/DrinkStore.API/bin
+/drink-store-api/DrinkStore.API/obj
