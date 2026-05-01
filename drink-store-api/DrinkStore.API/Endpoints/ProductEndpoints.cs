@@ -1,4 +1,6 @@
-﻿namespace DrinkStore.API.Endpoints
+﻿using DrinkStore.API.Dto;
+
+namespace DrinkStore.API.Endpoints
 {
     public static class ProductEndpoints
     {
@@ -11,7 +13,20 @@
 
         private static IResult GetProducts()
         {
-            return Results.Ok(new { Products = "abc" });
+            return Results.Ok(new List<ProductDto>() {
+                new ProductDto {
+                    Image = "",
+                    Name = "Product 1",
+                    Stock = 2,
+                    Price = 300
+                },
+                new ProductDto {
+                    Image = "",
+                    Name = "Dang",
+                    Stock = 56,
+                    Price = 1000
+                }
+            });
         }
     }
 }
