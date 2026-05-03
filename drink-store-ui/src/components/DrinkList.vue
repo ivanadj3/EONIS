@@ -16,12 +16,13 @@
     <n-spin :show="loading">
         <div class="grid">
         <n-grid :cols="4" x-gap="16" y-gap="16" responsive="screen">
-            <n-grid-item v-for="p in paginatedProducts" :key="p.id">
+            <n-grid-item v-for="p in products" :key="p.id">
             <n-card class="card" hoverable>
                 <img :src="p.image" class="img" />
                 <div class="info">
-                <div class="name">{{ p.title }}</div>
-                <div class="price">$ {{ p.price.toFixed(2) }}</div>
+                <div class="name">{{ p.name }}</div>
+                <div class="price"> {{ p.price }} din.</div>
+                <div><n-button type="primary" @click="routeToProductDetails(p.id)"">Vise detalja...</n-button></div>
                 </div>
             </n-card>
             </n-grid-item>
@@ -43,81 +44,73 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { NInput, NSelect, NGrid, NGridItem, NCard, NPagination } from "naive-ui";
-import { fetchProductsApi } from "../api/products.api";
+  import { ref, computed, watch } from "vue";
+  import { NInput, NSelect, NGrid, NGridItem, NCard, NPagination, NButton } from "naive-ui";
+  import { fetchProductsApi } from "../api/products.api";
+  import { useRouter } from "vue-router";
 
-const search = ref("");
-const sort = ref("none");
-const page = ref(1);
-const pageSize = ref(8);
+  const router = useRouter();
 
-const loading = ref(false);
-const error = ref(null);
+  const search = ref("");
+  const sort = ref("none");
+  const page = ref(1);
+  const pageSize = ref(8);
 
-const sortOptions = [
-  { label: "None", value: "none" },
-  { label: "Price: Low to High", value: "asc" },
-  { label: "Price: High to Low", value: "desc" }
-];
+  const loading = ref(false);
+  const error = ref(null);
 
-const products = ref([]);
+  const sortOptions = [
+    { label: "None", value: "none" },
+    { label: "Price: Low to High", value: "asc" },
+    { label: "Price: High to Low", value: "desc" }
+  ];
 
-const filtered = computed(() => {
-  let list = products.value;
+  const products = ref([]);
+  const total = ref(0);
 
-  if (search.value) {
-    list = list.filter(p =>
-      p.title.toLowerCase().includes(search.value.toLowerCase())
-    );
+  const fetchProducts = async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const res = await fetchProductsApi({
+        search: search.value,
+        sort: sort.value,
+        page: page.value,
+        pageSize: pageSize.value,
+      });
+
+      products.value = res.data;
+      total.value = res.total;
+      page.value = res.page;
+      pageSize.value = res.pageSize;
+    } catch (e) {
+      error.value = e;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const pageCount = computed(() =>
+    Math.ceil(total.value / pageSize.value)
+  );
+
+  console.log(pageCount.value)
+
+  function onPageSizeChange(size) {
+    pageSize.value = size;
+    page.value = 1;
   }
 
-  if (sort.value === "asc") {
-    list = [...list].sort((a, b) => a.price - b.price);
-  }
-  if (sort.value === "desc") {
-    list = [...list].sort((a, b) => b.price - a.price);
+  const routeToProductDetails = (productId) => {
+      router.push(`/drinks/${productId}`);
   }
 
-  return list;
-});
+  watch([search, sort, page, pageSize], () => {
+    fetchProducts();
+  }, { deep: true });
 
-const fetchProducts = async () => {
-  loading.value = true;
-  error.value = null;
-
-  try {
-    const res = await fetchProductsApi({
-      search: search.value,
-      sort: sort.value,
-      page: page.value,
-      pageSize: pageSize.value,
-    });
-
-    products.value = res;
-    // total.value = res.total;
-  } catch (e) {
-    error.value = e;
-  } finally {
-    loading.value = false;
-  }
-};
-
-const pageCount = computed(() =>
-  Math.ceil(filtered.value.length / pageSize.value)
-);
-
-const paginatedProducts = computed(() => {
-  const start = (page.value - 1) * pageSize.value;
-  return filtered.value.slice(start, start + pageSize.value);
-});
-
-function onPageSizeChange(size) {
-  pageSize.value = size;
-  page.value = 1;
-}
-
-fetchProducts()
+  fetchProducts()
 
 </script>
 

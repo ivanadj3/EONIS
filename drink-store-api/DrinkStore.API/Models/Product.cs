@@ -1,6 +1,6 @@
-﻿namespace DrinkStore.API.Dto
+﻿namespace DrinkStore.API.Models
 {
-    public class ProductDto
+    public class Product
     {
         public int Id { get; set; }
         public string Name { get; set; }

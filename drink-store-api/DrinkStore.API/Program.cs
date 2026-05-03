@@ -1,4 +1,6 @@
+using DrinkStore.API.Db;
 using DrinkStore.API.Endpoints;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +17,21 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddDbContext<DrinkStoreDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"))
+);
+
 var app = builder.Build();
 
 app.UseCors("VueApp");
 
 app.MapProductEndpoints();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DrinkStoreDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
 
