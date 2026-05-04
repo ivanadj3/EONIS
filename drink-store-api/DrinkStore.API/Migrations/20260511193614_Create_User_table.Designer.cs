@@ -2,6 +2,7 @@
 using DrinkStore.API.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrinkStore.API.Migrations
 {
     [DbContext(typeof(DrinkStoreDbContext))]
-    partial class DrinkStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260511193614_Create_User_table")]
+    partial class Create_User_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -17,13 +17,15 @@
         <n-badge :value="2">
           <n-button text>🛒</n-button>
         </n-badge>
-        <n-button type="primary" size="small">Sign In</n-button>
+        <router-link to="/login">Sign In</router-link>
       </div>
     </n-layout-header>
 
   </n-layout>
 
-  <router-view />
+  <n-message-provider>
+    <router-view />
+  </n-message-provider>
 </template>
 
 <script setup>
