@@ -6,10 +6,8 @@
         
         <div class="layout">
           
-          <!-- IMAGE -->
           <img :src="product.image" class="img" />
 
-          <!-- INFO -->
           <div class="info">
 
             <h2>{{ product.title }}</h2>
@@ -20,7 +18,6 @@
               {{ product.description || "No description available." }}
             </p>
 
-            <!-- QUANTITY -->
             <div class="qty">
               <span>Quantity:</span>
 
@@ -31,8 +28,7 @@
               />
             </div>
 
-            <!-- ADD TO CART -->
-            <n-button type="primary" size="large" @click="addToCart">
+            <n-button type="primary" size="large" @click="handleAddToCart">
               Add to Cart
             </n-button>
 
@@ -52,50 +48,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { fetchProductByIdApi } from "../api/products.api";
+  import { ref, onMounted } from "vue";
+  import { useRoute } from "vue-router";
+  import { fetchProductByIdApi } from "../api/products.api";
+  import { addToCart } from "../store/cart";
 
-const route = useRoute();
+  const route = useRoute();
 
-const product = ref(null);
-const loading = ref(false);
-const error = ref(null);
+  const product = ref(null);
+  const loading = ref(false);
+  const error = ref(null);
 
-const quantity = ref(1);
+  const quantity = ref(1);
 
-// fake cart (replace later with Pinia if needed)
-const cart = ref([]);
+  const fetchProduct = async () => {
+    loading.value = true;
+    error.value = null;
 
-const fetchProduct = async () => {
-  loading.value = true;
-  error.value = null;
+    try {
+      const id = route.params.id;
 
-  try {
-    const id = route.params.id;
+      const res = await fetchProductByIdApi(id);
+      product.value = res;
 
-    const res = await fetchProductByIdApi(id);
-    product.value = res;
+    } catch (e) {
+      error.value = e;
+    } finally {
+      loading.value = false;
+    }
+  };
 
-  } catch (e) {
-    error.value = e;
-  } finally {
-    loading.value = false;
-  }
-};
+  const handleAddToCart = () => {
+    if (!product.value) return;
 
-const addToCart = () => {
-  if (!product.value) return;
+    addToCart(product.value, quantity.value);
+  };
 
-  cart.value.push({
-    product: product.value,
-    quantity: quantity.value,
-  });
-
-  console.log("Cart:", cart.value);
-};
-
-onMounted(fetchProduct);
+  onMounted(fetchProduct);
 </script>
 
 <style scoped>

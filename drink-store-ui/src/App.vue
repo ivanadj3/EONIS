@@ -14,10 +14,11 @@
       </div>
       <div class="nav-right">
         <n-button text>🔍</n-button>
-        <n-badge :value="2">
+        <n-badge :value="cartCount">
           <n-button text>🛒</n-button>
         </n-badge>
-        <router-link to="/login">Sign In</router-link>
+        <router-link v-if="Object.keys(user).length === 0" to="/login">Sign In</router-link>
+        <n-button v-if="Object.keys(user).length !== 0" text @click="handleLogout">Logout</n-button>
       </div>
     </n-layout-header>
 
@@ -29,49 +30,64 @@
 </template>
 
 <script setup>
-const products = [
-  { name: "Orange Juice", desc: "Fresh & natural vitamin boost.", price: 4 },
-  { name: "Iced Coffee", desc: "Cold brew for energy lovers.", price: 5 },
-  { name: "Berry Smoothie", desc: "Sweet, healthy, refreshing.", price: 6 }
-];
+import { computed } from 'vue';
+import { cartItems } from './store/cart';
+import { deleteUser, user } from './store/user';
+
+  const products = [
+    { name: "Orange Juice", desc: "Fresh & natural vitamin boost.", price: 4 },
+    { name: "Iced Coffee", desc: "Cold brew for energy lovers.", price: 5 },
+    { name: "Berry Smoothie", desc: "Sweet, healthy, refreshing.", price: 6 }
+  ];
+
+  const cartCount = computed(() =>
+    cartItems.value.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    )
+  );
+
+  const handleLogout = () => {
+    deleteUser();
+  }
 </script>
 
 <style scoped>
-.app {
-  font-family: system-ui;
-}
+  .app {
+    font-family: system-ui;
+  }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 24px;
-  align-items: center;
-}
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    align-items: center;
+  }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
 
-.logo {
-  font-weight: bold;
-  font-size: 18px;
-}
+  .logo {
+    font-weight: bold;
+    font-size: 18px;
+  }
 
-.nav-links a {
-  margin-right: 12px;
-  text-decoration: none;
-  color: #333;
-}
+  .nav-links a {
+    margin-right: 12px;
+    text-decoration: none;
+    color: #333;
+  }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-.footer {
-  padding: 20px;
-}
+  .footer {
+    padding: 20px;
+  }
 </style>

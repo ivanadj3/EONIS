@@ -55,6 +55,7 @@
     import { ref, computed, watch } from "vue";
     import { useRouter } from "vue-router";
     import { loginApi } from "../api/auth.api";
+    import { setUser } from "../store/user";
 
     const router = useRouter();
 
@@ -97,8 +98,8 @@
 
             const token = res.token;
 
-            // store JWT
             localStorage.setItem("token", token);
+            setUser(token);
 
             // redirect
             router.push("/");
