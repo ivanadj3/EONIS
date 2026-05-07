@@ -14,9 +14,11 @@
       </div>
       <div class="nav-right">
         <n-button text>🔍</n-button>
-        <n-badge :value="cartCount">
-          <n-button text>🛒</n-button>
-        </n-badge>
+        <router-link to="/cart">
+          <n-badge :value="cartCount">
+            <n-button text>🛒</n-button>
+          </n-badge>
+        </router-link>
         <router-link v-if="Object.keys(user).length === 0" to="/login">Sign In</router-link>
         <n-button v-if="Object.keys(user).length !== 0" text @click="handleLogout">Logout</n-button>
       </div>

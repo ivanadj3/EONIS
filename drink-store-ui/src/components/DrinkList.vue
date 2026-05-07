@@ -2,7 +2,7 @@
   <div class="page">
     <div class="header">
       <div class="controls">
-        <n-input v-model:value="search" placeholder="Search products..." clearable />
+        <n-input v-model:value="search" placeholder="Pretraga proizvoda..." clearable />
 
         <n-select
           v-model:value="sort"
@@ -52,7 +52,7 @@
   const router = useRouter();
 
   const search = ref("");
-  const sort = ref("none");
+  const sort = ref("-");
   const page = ref(1);
   const pageSize = ref(8);
 
@@ -60,9 +60,9 @@
   const error = ref(null);
 
   const sortOptions = [
-    { label: "None", value: "none" },
-    { label: "Price: Low to High", value: "asc" },
-    { label: "Price: High to Low", value: "desc" }
+    { label: "-", value: "-" },
+    { label: "Cena: rastuce", value: "asc" },
+    { label: "Cena: opadajuce", value: "desc" }
   ];
 
   const products = ref([]);
@@ -94,8 +94,6 @@
   const pageCount = computed(() =>
     Math.ceil(total.value / pageSize.value)
   );
-
-  console.log(pageCount.value)
 
   function onPageSizeChange(size) {
     pageSize.value = size;
