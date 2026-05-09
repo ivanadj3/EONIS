@@ -59,6 +59,7 @@ app.UseAuthorization();
 app.MapProductEndpoints();
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
+app.MapOrderEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

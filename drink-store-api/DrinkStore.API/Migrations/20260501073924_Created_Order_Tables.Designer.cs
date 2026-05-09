@@ -3,6 +3,7 @@ using System;
 using DrinkStore.API.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DrinkStore.API.Migrations
 {
     [DbContext(typeof(DrinkStoreDbContext))]
-    partial class DrinkStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260512073924_Created_Order_Tables")]
+    partial class Created_Order_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +32,6 @@ namespace DrinkStore.API.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -55,7 +54,7 @@ namespace DrinkStore.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("integer");
 
                     b.Property<int>("ProductId")
@@ -155,13 +154,9 @@ namespace DrinkStore.API.Migrations
 
             modelBuilder.Entity("DrinkStore.API.Models.OrderItem", b =>
                 {
-                    b.HasOne("DrinkStore.API.Models.Order", "Order")
+                    b.HasOne("DrinkStore.API.Models.Order", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("DrinkStore.API.Models.Order", b =>

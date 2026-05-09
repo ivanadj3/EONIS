@@ -45,8 +45,8 @@
 
         <div class="actions">
           <n-button @click="clear">Isprazni korpu</n-button>
-          <n-button type="primary" size="large">
-            Placanje
+          <n-button type="primary" size="large" @click="checkout" :disabled="loading">
+            {{ loading ? "Ucitavanje..." : "Placanje" }}
           </n-button>
         </div>
 
@@ -58,10 +58,17 @@
 </template>
 
 <script setup>
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
     import { cartItems, clearCart, removeFromCart } from "../store/cart";
+    import { makeOrderApi } from "../api/order.api";
+    import { useMessage } from "naive-ui";
+    import { useRouter } from "vue-router";
 
     const items = cartItems;
+    const loading = ref(false);
+
+    const message = useMessage();
+    const router = useRouter();
 
     const updateCart = () => {
         localStorage.setItem("cart", JSON.stringify(items.value));
@@ -76,10 +83,34 @@
     };
 
     const total = computed(() => {
-    return items.value.reduce((sum, i) => {
-        return sum + i.price * i.quantity;
-    }, 0);
+      return items.value.reduce((sum, i) => {
+          return sum + i.price * i.quantity;
+      }, 0);
     });
+
+    const checkout = async() => {
+        loading.value = true;
+
+        try {
+            const body = items.value.map(x => ({
+              productId: x.id,
+              quantity: x.quantity
+            }));
+
+            const res = await makeOrderApi({
+                items: body
+            });
+
+            message.success('Porudzbina je uspesno sacuvana')
+
+            router.push("/pre-checkout/" + res.id);
+        } catch (e) {
+            console.log(e)
+            message.error(e.response?.data?.message || "Neocekivana greska")
+        } finally {
+            loading.value = false;
+        }
+    }
 </script>
 
 <style scoped>

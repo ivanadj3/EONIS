@@ -5,6 +5,7 @@ import DrinkDetails from '../components/DrinkDetails.vue'
 import Login from '../components/Login.vue'
 import SignUp from '../components/SignUp.vue'
 import Cart from '../components/Cart.vue'
+import PreCheckout from '../components/PreCheckout.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: Cart
+  },
+  {
+    path: '/pre-checkout/:id',
+    name: 'PreCheckout',
+    component: PreCheckout
   },
 ]
 
