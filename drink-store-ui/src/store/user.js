@@ -23,4 +23,5 @@ export function deleteUser() {
   user.value = {};
   localStorage.removeItem(USER_KEY);
   clearCart()
+  localStorage.removeItem('token');
 }

@@ -50,6 +50,7 @@
         <n-button
           type="primary"
           size="large"
+          :disabled="loading"
           @click="goToStripe"
         >
           Nastavite na placanje
@@ -64,26 +65,41 @@
 
 <script setup>
     import { useRoute } from "vue-router";
+    import { createCheckoutSessionApi } from "../api/stripe.api";
+    import { useMessage } from "naive-ui";
+    import { ref } from "vue";
 
     const route = useRoute();
+    const message = useMessage();
 
     const orderId = route.params.id;
+
+     const loading = ref(false);
 
     // from backend ideally
     const total = "124.99";
 
     const goBack = () => {
-    history.back();
+        history.back();
     };
 
     const goToStripe = async () => {
+        try {
+            loading.value = true;
+            const res = await createCheckoutSessionApi({
+                orderId
+            });
 
-    // call backend to create stripe session
-    // then redirect
+            const url = res.sessionUrl;
+            
+            window.location.href = url;
+        } catch (e) {
+            message.error(e.response?.data?.message || "Neocekivana greska");
+        } finally {
+            loading.value = false;
+        }
+    }
 
-    window.location.href =
-        "https://checkout.stripe.com/...";
-    };
 </script>
 
 <style scoped>

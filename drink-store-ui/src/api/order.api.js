@@ -6,5 +6,6 @@ export const makeOrderApi = async (params) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
     }
   });
+  
   return data;
 };

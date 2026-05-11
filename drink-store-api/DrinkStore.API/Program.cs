@@ -3,6 +3,7 @@ using DrinkStore.API.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +50,9 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+var stripeSection =builder.Configuration.GetSection("Stripe");
+StripeConfiguration.ApiKey =stripeSection["SecretKey"];
+
 var app = builder.Build();
 
 app.UseCors("VueApp");
@@ -60,6 +64,7 @@ app.MapProductEndpoints();
 app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapOrderEndpoints();
+app.MapAStripeEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

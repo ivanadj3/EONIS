@@ -54,7 +54,10 @@ namespace DrinkStore.API.Endpoints
             await dbContext.AddRangeAsync(dbItems);
             await dbContext.SaveChangesAsync();
 
-            return Results.Ok();
+            return Results.Ok(new
+            {
+                OrderId  = order.Id
+            });
         }
     }
 }

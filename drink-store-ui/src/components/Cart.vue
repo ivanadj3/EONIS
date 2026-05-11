@@ -103,7 +103,7 @@
 
             message.success('Porudzbina je uspesno sacuvana')
 
-            router.push("/pre-checkout/" + res.id);
+            router.push("/pre-checkout/" + res.orderId);
         } catch (e) {
             console.log(e)
             message.error(e.response?.data?.message || "Neocekivana greska")
