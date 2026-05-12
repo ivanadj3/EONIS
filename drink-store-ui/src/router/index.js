@@ -6,6 +6,7 @@ import Login from '../components/Login.vue'
 import SignUp from '../components/SignUp.vue'
 import Cart from '../components/Cart.vue'
 import PreCheckout from '../components/PreCheckout.vue'
+import OrdersList from '../components/OrdersList.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/pre-checkout/:id',
     name: 'PreCheckout',
     component: PreCheckout
+  },
+  {
+    path: '/orders/my',
+    name: 'MyOrders',
+    component: OrdersList
   },
 ]
 

@@ -13,6 +13,7 @@ namespace DrinkStore.API.Endpoints
             var group = app.MapGroup("/api/orders");
 
             group.MapPost("/", MakeOrderAsync).RequireAuthorization();
+            group.MapGet("/", FetchOrdersAsync).RequireAuthorization();
         }
 
         private static async Task<IResult> MakeOrderAsync(DrinkStoreDbContext dbContext, ReqMakeOrder dto, IConfiguration config, ClaimsPrincipal claimsPrincipal)
@@ -56,7 +57,34 @@ namespace DrinkStore.API.Endpoints
 
             return Results.Ok(new
             {
-                OrderId  = order.Id
+                OrderId = order.Id
+            });
+        }
+
+        private static async Task<IResult> FetchOrdersAsync(DrinkStoreDbContext dbContext,ClaimsPrincipal claimsPrincipal)
+        {
+            var userId = claimsPrincipal.FindFirstValue(
+               ClaimTypes.NameIdentifier
+           );
+
+            var orders = await dbContext.Orders.Include(x => x.Items).Where(x => x.User.Id == int.Parse(userId)).OrderByDescending(x => x.Id).Select(x => new ResOrder
+            {
+                Id = x.Id,
+                Paid = x.Paid,
+                CreatedAt = x.CreatedAt,
+                TotalAmount = x.Items.Sum(x => x.TotalPrice),
+                Items = x.Items.Select(x => new ResOrderItem
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    Quantity = x.Quantity,
+                    TotalPrice = x.TotalPrice
+                })
+            }).ToListAsync();
+
+            return Results.Ok(new {
+                Data = orders
             });
         }
     }

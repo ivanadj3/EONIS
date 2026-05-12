@@ -7,5 +7,6 @@
         public User User { get; set; }
         public string Address { get; set; }
         public IEnumerable<OrderItem> Items { get; set; }
+        public bool Paid { get; set; }
     }
 }

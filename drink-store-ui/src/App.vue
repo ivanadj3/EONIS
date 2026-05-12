@@ -7,9 +7,7 @@
         <n-space size="large" class="nav-links">
           <router-link to="/">Pocetna strana</router-link>
           <router-link to="/drink-list">Lista pica</router-link>
-          <a href="#">Categories</a>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
+          <router-link to="/orders/my">Moje porudzbine</router-link>
         </n-space>
       </div>
       <div class="nav-right">

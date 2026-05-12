@@ -7,9 +7,9 @@
         ✅
       </div>
 
-      <h1>Porudzbina je kreirana!</h1>
+      <h1 v-if="!hideOrderCreatedText">Porudzbina je kreirana!</h1>
 
-      <p class="text">
+      <p class="text" v-if="!hideOrderCreatedText">
         Vasa porudzbina je uspesno sacuvana.
       </p>
 
@@ -73,6 +73,7 @@
     const message = useMessage();
 
     const orderId = route.params.id;
+    const hideOrderCreatedText = route.query.hideCreated;
 
      const loading = ref(false);
 
