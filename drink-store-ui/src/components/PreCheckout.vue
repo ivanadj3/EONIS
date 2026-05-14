@@ -29,7 +29,7 @@
         </div>
 
         <div>
-          <span>Ukupno</span>
+          <span>Ukupno </span>
           <strong>{{ total }}</strong>
         </div>
       </div>
@@ -67,7 +67,8 @@
     import { useRoute } from "vue-router";
     import { createCheckoutSessionApi } from "../api/stripe.api";
     import { useMessage } from "naive-ui";
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
+    import { getOrderByIdApi } from "../api/order.api";
 
     const route = useRoute();
     const message = useMessage();
@@ -75,10 +76,24 @@
     const orderId = route.params.id;
     const hideOrderCreatedText = route.query.hideCreated;
 
-     const loading = ref(false);
+    const loading = ref(false);
+    const total = ref(0.0)
 
-    // from backend ideally
-    const total = "124.99";
+    const fetchOrder = async () => {
+        try {
+          loading.value = true;
+          const res = await getOrderByIdApi(orderId);
+
+          total.value = res.data.totalAmount;
+        } catch (e) {
+            message.error(
+            e.response?.data?.message ||
+            "Neuspesno ucitavanje "
+            );
+        } finally {
+            loading.value = false;
+        }
+    };
 
     const goBack = () => {
         history.back();
@@ -98,8 +113,13 @@
             message.error(e.response?.data?.message || "Neocekivana greska");
         } finally {
             loading.value = false;
-        }
+      }
+
     }
+
+    onMounted(() => {
+      fetchOrder();
+    });
 
 </script>
 

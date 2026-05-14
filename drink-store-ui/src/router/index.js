@@ -7,6 +7,7 @@ import SignUp from '../components/SignUp.vue'
 import Cart from '../components/Cart.vue'
 import PreCheckout from '../components/PreCheckout.vue'
 import OrdersList from '../components/OrdersList.vue'
+import OrderDetails from '../components/OrderDetails.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/orders/my',
     name: 'MyOrders',
     component: OrdersList
+  },
+  {
+    path: '/orders/:id',
+    name: 'OrderDetails',
+    component: OrderDetails
   },
 ]
 

@@ -102,6 +102,7 @@
             });
 
             message.success('Porudzbina je uspesno sacuvana')
+            clearCart();
 
             router.push("/pre-checkout/" + res.orderId);
         } catch (e) {

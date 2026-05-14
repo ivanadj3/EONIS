@@ -19,3 +19,13 @@ export const getOrdersApi = async (params) => {
 
   return data;
 };
+
+export const getOrderByIdApi = async (id) => {
+   const { data } = await http.get("/orders/" + id, {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  return data;
+};

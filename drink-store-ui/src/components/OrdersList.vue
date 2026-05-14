@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="meta">
-                  Quantity: {{ item.quantity }}
+                  Kolicina: {{ item.quantity }}
                 </div>
               </div>
 
@@ -145,15 +145,15 @@
     };
 
     const viewDetails = (id) => {
-    router.push(`/orders/${id}`);
+      router.push(`/orders/${id}`);
     };
 
     const formatDate = (date) => {
-    return new Date(date).toLocaleString();
+      return new Date(date).toLocaleString("sr-RS")
     };
 
     onMounted(() => {
-    fetchOrders();
+      fetchOrders();
     });
 </script>
 

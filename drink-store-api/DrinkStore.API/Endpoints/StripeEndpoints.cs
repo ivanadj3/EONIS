@@ -1,6 +1,7 @@
 ﻿using DrinkStore.API.Db;
 using DrinkStore.API.Dto;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
 
@@ -13,6 +14,7 @@ namespace DrinkStore.API.Endpoints
             var group = app.MapGroup("/api/stripe");
 
             group.MapPost("/session", CreateStripeSessionAsync).RequireAuthorization();
+            group.MapPost("/webhook", ProcessWebhookAsync);
         }
 
         private static async Task<IResult> CreateStripeSessionAsync(DrinkStoreDbContext dbContext, ReqCreateStripeSession dto, HttpContext context, IConfiguration config, ClaimsPrincipal claimsPrincipal)
@@ -63,6 +65,38 @@ namespace DrinkStore.API.Endpoints
             {
                 SessionUrl = session.Url
             });
+        }
+
+        private static async Task<IResult> ProcessWebhookAsync(DrinkStoreDbContext dbContext, HttpRequest request, IConfiguration config, ILogger<Program> logger)
+        {
+            try { 
+                var json = await new StreamReader(request.Body).ReadToEndAsync();
+
+                var stripeEvent = EventUtility.ConstructEvent(json, request.Headers["Stripe-Signature"],config["Stripe:WebhookSecret"]);
+
+                if (stripeEvent.Type == "checkout.session.completed")
+                {
+                    var session = stripeEvent.Data.Object as Session;
+
+                    var orderId = session.Metadata["orderId"];
+
+                    var order = await dbContext.Orders.FirstOrDefaultAsync(x => x.Id == int.Parse(orderId));
+
+                    if (order != null)
+                    {
+                        order.Paid = true;
+
+                        await dbContext.SaveChangesAsync();
+                    }
+                }
+
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Webhook - {ex}", ex);
+                return Results.BadRequest();
+            }
         }
     }
 }
