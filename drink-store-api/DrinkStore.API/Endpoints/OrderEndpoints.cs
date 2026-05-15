@@ -111,7 +111,8 @@ namespace DrinkStore.API.Endpoints
                     TotalPrice = x.TotalPrice
                 }),
                 Address = x.Address,
-                User = x.User.Name + " " + x.User.Surname
+                User = x.User.Name + " " + x.User.Surname,
+                Phone = x.User.Phone
             }).FirstOrDefaultAsync();
 
             if (order == null) return Results.BadRequest();

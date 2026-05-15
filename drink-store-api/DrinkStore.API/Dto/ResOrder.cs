@@ -8,6 +8,7 @@
         public IEnumerable<ResOrderItem> Items { get; set; }
         public bool Paid { get; set; }
         public string Address { get; set; }
+        public string Phone { get; set; }
         public string User { get; set; }
     }
 

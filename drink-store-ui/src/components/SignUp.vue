@@ -22,6 +22,10 @@
         <n-form-item label="Adresa" path="address">
           <n-input v-model:value="form.address" placeholder="Adresa" />
         </n-form-item>
+
+        <n-form-item label="Telefon" path="phone">
+          <n-input v-model:value="form.phone" placeholder="Telefon" />
+        </n-form-item>
         
         <n-form-item label="Email" path="email">
           <n-input v-model:value="form.email" placeholder="Enter email" />
@@ -85,6 +89,7 @@
         name: "",
         surname: "",
         address: "",
+        phone: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -122,6 +127,9 @@
         address: [
             { required: true, message: "Obavezno polje", trigger: "blur" },
         ],
+        phone: [
+            { required: true, message: "Obavezno polje", trigger: "blur" },
+        ],
         email: [
             { required: true, message: "Obavezno polje", trigger: "blur" },
             { type: "email", message: "Neispravan format", trigger: "blur" },
@@ -152,6 +160,7 @@
                 address: form.value.address,
                 email: form.value.email,
                 password: form.value.password,
+                phone: form.value.phone,
             });
 
             message.success("Uspešna registracija!");

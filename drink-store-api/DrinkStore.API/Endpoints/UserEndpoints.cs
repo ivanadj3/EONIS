@@ -34,6 +34,7 @@ namespace DrinkStore.API.Endpoints
                 Surname = dto.Surname,
                 Address = dto.Address,
                 Email = dto.Email,
+                Phone = dto.Phone,
                 PasswordHash = hash
             };
 

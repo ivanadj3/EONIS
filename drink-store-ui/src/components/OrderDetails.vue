@@ -218,7 +218,7 @@ onMounted(() => {
 }
 
 .shipping-item {
-  padding: 18px;
+  padding-left: 18px;
 
   border-radius: 16px;
 
@@ -276,19 +276,9 @@ onMounted(() => {
   text-align: right;
 }
 
-.subtotal {
-  margin-top: 8px;
-
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .summary {
-  padding: 22px;
-
+  padding-left: 22px;
   border-radius: 18px;
-
-  background: rgba(255,255,255,0.04);
 }
 
 .summary-row {
