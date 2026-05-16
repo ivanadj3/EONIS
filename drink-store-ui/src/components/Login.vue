@@ -98,7 +98,6 @@
 
             const token = res.token;
 
-            localStorage.setItem("token", token);
             setUser(token);
 
             // redirect

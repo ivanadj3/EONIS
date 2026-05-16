@@ -1,6 +1,8 @@
 ﻿using DrinkStore.API.Db;
 using DrinkStore.API.Dto;
+using DrinkStore.API.Models;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace DrinkStore.API.Endpoints
 {
@@ -12,6 +14,9 @@ namespace DrinkStore.API.Endpoints
 
             group.MapGet("/", GetProductsAsync);
             group.MapGet("/{id}", GetProductByIdAsync);
+            group.MapPost("/", CreateProductAsync);
+            group.MapDelete("/{id}", DeleteProductAsync);
+            group.MapPut("/{id}", UpdateProductAsync);
         }
 
         private static async Task<IResult> GetProductsAsync(DrinkStoreDbContext dbContext, string? search = null, string sortBy = "Name", string sort = "asc", int pageSize = 10, int page = 1)
@@ -67,5 +72,48 @@ namespace DrinkStore.API.Endpoints
                 Price = product.Price
             });
         }
+
+        private static async Task<IResult> CreateProductAsync(DrinkStoreDbContext dbContext, ReqCreateProduct dto)
+        {
+            var exists = await dbContext.Products.Where(x => x.Name == dto.Name).AnyAsync();
+            if (exists) return Results.BadRequest();
+
+            var product = new Product
+            {
+                Image = dto.Image,
+                Name = dto.Name,
+                Price = dto.Price,
+                Stock = dto.Stock,
+            };
+
+            await dbContext.Products.AddAsync(product);
+
+            await dbContext.SaveChangesAsync();
+
+            return Results.Ok();
+        }
+
+        private static async Task<IResult> DeleteProductAsync(DrinkStoreDbContext dbContext, int id)
+        {
+            await dbContext.Products.Where(x => x.Id == id).ExecuteDeleteAsync();
+
+            return Results.Ok();
+        }
+
+        private static async Task<IResult> UpdateProductAsync(DrinkStoreDbContext dbContext, int id, ReqCreateProduct dto)
+        {
+            var product = await dbContext.Products.Where(x => x.Name == dto.Name).FirstOrDefaultAsync();
+            if (product == null) return Results.BadRequest();
+
+            product.Image = dto.Image;
+            product.Name = dto.Name;
+            product.Price = dto.Price;
+            product.Stock = dto.Stock;
+
+            await dbContext.SaveChangesAsync();
+
+            return Results.Ok();
+        }
     }
 }
+

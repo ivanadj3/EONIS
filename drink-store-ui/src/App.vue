@@ -5,34 +5,38 @@
       <div class="nav-left">
         <span class="logo">🥤 DrinkStore</span>
         <n-space size="large" class="nav-links">
-          <router-link to="/">Pocetna strana</router-link>
-          <router-link to="/drink-list">Lista pica</router-link>
-          <router-link to="/orders/my">Moje porudzbine</router-link>
+          <router-link to="/" class="nav-link">Pocetna strana</router-link>
+          <router-link to="/drink-list" class="nav-link">Lista pica</router-link>
+          <router-link v-if="isLoggedIn()" to="/orders/my" class="nav-link">Moje porudzbine</router-link>
         </n-space>
       </div>
       <div class="nav-right">
-        <n-button text>🔍</n-button>
-        <router-link to="/cart">
+        <router-link v-if="isLoggedIn()" to="/cart">
           <n-badge :value="cartCount">
             <n-button text>🛒</n-button>
           </n-badge>
         </router-link>
-        <router-link v-if="Object.keys(user).length === 0" to="/login">Sign In</router-link>
-        <n-button v-if="Object.keys(user).length !== 0" text @click="handleLogout">Logout</n-button>
+        <router-link v-if="!isLoggedIn()" to="/login" class="nav-link">Login</router-link>
+        <router-link v-if="!isLoggedIn()" to="/sign-up" class="nav-link">Registracija</router-link>
+        <n-button v-if="isLoggedIn()" text @click="handleLogout" class="nav-link">Logout</n-button>
       </div>
     </n-layout-header>
 
   </n-layout>
 
-  <n-message-provider>
-    <router-view />
-  </n-message-provider>
+  <n-config-provider>
+    <n-dialog-provider>
+      <n-message-provider>
+        <router-view />
+      </n-message-provider>
+    </n-dialog-provider>
+  </n-config-provider>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { cartItems } from './store/cart';
-import { deleteUser, user } from './store/user';
+import { deleteUser, isLoggedIn } from './store/user';
 
   const products = [
     { name: "Orange Juice", desc: "Fresh & natural vitamin boost.", price: 4 },
@@ -50,6 +54,7 @@ import { deleteUser, user } from './store/user';
   const handleLogout = () => {
     deleteUser();
   }
+
 </script>
 
 <style scoped>
@@ -75,7 +80,7 @@ import { deleteUser, user } from './store/user';
     font-size: 18px;
   }
 
-  .nav-links a {
+  .nav-link {
     margin-right: 12px;
     text-decoration: none;
     color: #333;

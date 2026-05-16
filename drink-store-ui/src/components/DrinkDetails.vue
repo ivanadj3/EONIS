@@ -15,11 +15,11 @@
             <p class="price">{{ product.price }} din.</p>
 
             <p class="desc">
-              {{ product.description || "No description available." }}
+              {{ product.description || "Opis nije pronadjen." }}
             </p>
 
             <div class="qty">
-              <span>Quantity:</span>
+              <span>Kolicina:</span>
 
               <n-input-number
                 v-model:value="quantity"
@@ -28,10 +28,12 @@
               />
             </div>
 
-            <n-button type="primary" size="large" @click="handleAddToCart">
-              Add to Cart
+            <n-button type="primary" size="large" :disabled="!isLoggedIn()" @click="handleAddToCart">
+              Dodaj u korpu
             </n-button>
 
+            <p v-if="!isLoggedIn()" style="opacity: .5;">Potrebno je da se ulogujete da biste mogli da dodate proizvod u korpu</p>
+            
           </div>
         </div>
 
@@ -52,6 +54,7 @@
   import { useRoute } from "vue-router";
   import { fetchProductByIdApi } from "../api/products.api";
   import { addToCart } from "../store/cart";
+import { isLoggedIn } from "../store/user";
 
   const route = useRoute();
 
