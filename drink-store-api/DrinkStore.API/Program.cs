@@ -48,7 +48,13 @@ builder.Services
             };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireRole("Admin");
+    });
+});
 
 var stripeSection =builder.Configuration.GetSection("Stripe");
 StripeConfiguration.ApiKey =stripeSection["SecretKey"];

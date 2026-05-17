@@ -14,9 +14,9 @@ namespace DrinkStore.API.Endpoints
 
             group.MapGet("/", GetProductsAsync);
             group.MapGet("/{id}", GetProductByIdAsync);
-            group.MapPost("/", CreateProductAsync);
-            group.MapDelete("/{id}", DeleteProductAsync);
-            group.MapPut("/{id}", UpdateProductAsync);
+            group.MapPost("/", CreateProductAsync).RequireAuthorization("AdminOnly");
+            group.MapDelete("/{id}", DeleteProductAsync).RequireAuthorization("AdminOnly");
+            group.MapPut("/{id}", UpdateProductAsync).RequireAuthorization("AdminOnly");
         }
 
         private static async Task<IResult> GetProductsAsync(DrinkStoreDbContext dbContext, string? search = null, string sortBy = "Name", string sort = "asc", int pageSize = 10, int page = 1)

@@ -14,9 +14,9 @@ namespace DrinkStore.API.Endpoints
 
             group.MapPost("/", MakeOrderAsync).RequireAuthorization();
             group.MapGet("/", FetchOrdersAsync).RequireAuthorization();
-            group.MapGet("/admin", FetchOrdersAdminAsync).RequireAuthorization();
+            group.MapGet("/admin", FetchOrdersAdminAsync).RequireAuthorization("AdminOnly");
             group.MapGet("/{id}", FetchOrderByIdAsync).RequireAuthorization();
-            group.MapDelete("/{id}", DeleteOrderByIdAsync).RequireAuthorization();
+            group.MapDelete("/{id}", DeleteOrderByIdAsync).RequireAuthorization("AdminOnly");
         }
 
         private static async Task<IResult> MakeOrderAsync(DrinkStoreDbContext dbContext, ReqMakeOrder dto, IConfiguration config, ClaimsPrincipal claimsPrincipal)
