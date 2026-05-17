@@ -9,6 +9,7 @@ import PreCheckout from '../components/PreCheckout.vue'
 import OrdersList from '../components/OrdersList.vue'
 import OrderDetails from '../components/OrderDetails.vue'
 import AdminProduct from '../components/AdminProduct.vue'
+import AdminOrders from '../components/AdminOrders.vue'
 
 const routes = [
   {
@@ -56,10 +57,15 @@ const routes = [
     name: 'OrderDetails',
     component: OrderDetails
   },
-    {
+  {
     path: '/admin/products',
     name: 'AdminProduct',
     component: AdminProduct
+  },
+  {
+    path: '/admin/orders',
+    name: 'AdminOrders',
+    component: AdminOrders
   },
 ]
 

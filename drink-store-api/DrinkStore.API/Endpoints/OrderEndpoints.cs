@@ -14,7 +14,9 @@ namespace DrinkStore.API.Endpoints
 
             group.MapPost("/", MakeOrderAsync).RequireAuthorization();
             group.MapGet("/", FetchOrdersAsync).RequireAuthorization();
+            group.MapGet("/admin", FetchOrdersAdminAsync).RequireAuthorization();
             group.MapGet("/{id}", FetchOrderByIdAsync).RequireAuthorization();
+            group.MapDelete("/{id}", DeleteOrderByIdAsync).RequireAuthorization();
         }
 
         private static async Task<IResult> MakeOrderAsync(DrinkStoreDbContext dbContext, ReqMakeOrder dto, IConfiguration config, ClaimsPrincipal claimsPrincipal)
@@ -122,5 +124,43 @@ namespace DrinkStore.API.Endpoints
                 Data = order
             });
         }
+
+        private static async Task<IResult> FetchOrdersAdminAsync(DrinkStoreDbContext dbContext, ClaimsPrincipal claimsPrincipal)
+        {
+            var userId = claimsPrincipal.FindFirstValue(
+               ClaimTypes.NameIdentifier
+           );
+
+            var orders = await dbContext.Orders.Include(x => x.Items).OrderByDescending(x => x.Id).Select(x => new ResOrder
+            {
+                Id = x.Id,
+                Paid = x.Paid,
+                CreatedAt = x.CreatedAt,
+                TotalAmount = x.Items.Sum(x => x.TotalPrice),
+                Items = x.Items.Select(x => new ResOrderItem
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    Quantity = x.Quantity,
+                    TotalPrice = x.TotalPrice
+                }),
+                Deleteable = !x.Paid && DateTime.UtcNow > x.CreatedAt.AddDays(3)
+            }).ToListAsync();
+
+            return Results.Ok(new
+            {
+                Data = orders
+            });
+        }
+
+        private static async Task<IResult> DeleteOrderByIdAsync(DrinkStoreDbContext dbContext, int id)
+        {
+            await dbContext.OrderItems.Where(x => x.Order.Id == id).ExecuteDeleteAsync();
+            await dbContext.Orders.Where(x => x.Id == id).ExecuteDeleteAsync();
+
+            return Results.Ok();
+        }
     }
+
 }

@@ -21,8 +21,28 @@ export const getOrdersApi = async (params) => {
   return data;
 };
 
+export const getOrdersAdminApi = async (params) => {
+   const { data } = await http.get("/orders/admin", {
+    headers: {
+        Authorization: `Bearer ${user.value.jwt}`
+    }
+  });
+
+  return data;
+};
+
 export const getOrderByIdApi = async (id) => {
    const { data } = await http.get("/orders/" + id, {
+    headers: {
+        Authorization: `Bearer ${user.value.jwt}`
+    }
+  });
+
+  return data;
+};
+
+export const deleteOrderByIdApi = async (id) => {
+   const { data } = await http.delete("/orders/" + id, {
     headers: {
         Authorization: `Bearer ${user.value.jwt}`
     }

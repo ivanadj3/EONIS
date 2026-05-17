@@ -133,9 +133,6 @@ const saveLoading = ref(false);
 
 const products = ref([]);
 
-const search = ref("");
-const sort = ref("newest");
-
 const showModal = ref(false);
 const editingProduct = ref(null);
 
@@ -197,7 +194,7 @@ const fetchProducts = async () => {
   } catch (e) {
     message.error(
       e.response?.data?.message ||
-      "Failed to load products"
+      "Pribavljanje podataka nije ispelo"
     );
   } finally {
     loading.value = false;

@@ -10,6 +10,7 @@
         public string Address { get; set; }
         public string Phone { get; set; }
         public string User { get; set; }
+        public bool Deleteable { get; set; }
     }
 
     public class ResOrderItem
