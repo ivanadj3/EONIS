@@ -33,3 +33,7 @@ export function deleteUser() {
 export function isLoggedIn() {
   return Object.keys(user.value).length !== 0;
 }
+
+export function isAdmin() {
+  return user.value.role === 'Admin';
+}

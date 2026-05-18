@@ -1,17 +1,21 @@
 <template>
   <n-layout class="app">
     <!-- Navbar -->
+     <div v-if="isLoggedIn() && isAdmin()" class="navbar-yellow">ADMIN</div>
     <n-layout-header bordered class="navbar">
       <div class="nav-left">
         <span class="logo">🥤 DrinkStore</span>
         <n-space size="large" class="nav-links">
           <router-link to="/" class="nav-link">Pocetna strana</router-link>
           <router-link to="/drink-list" class="nav-link">Lista pica</router-link>
-          <router-link v-if="isLoggedIn()" to="/orders/my" class="nav-link">Moje porudzbine</router-link>
+          <router-link v-if="isLoggedIn() && !isAdmin()" to="/orders/my" class="nav-link">Moje porudzbine</router-link>
+          <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/products" class="nav-link">Proizvodi</router-link>
+          <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/orders" class="nav-link">Porudzbine</router-link>
+          <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/users" class="nav-link">Korisnici</router-link>
         </n-space>
       </div>
       <div class="nav-right">
-        <router-link v-if="isLoggedIn()" to="/cart">
+        <router-link v-if="isLoggedIn() && !isAdmin()" to="/cart">
           <n-badge :value="cartCount">
             <n-button text>🛒</n-button>
           </n-badge>
@@ -36,7 +40,7 @@
 <script setup>
 import { computed } from 'vue';
 import { cartItems } from './store/cart';
-import { deleteUser, isLoggedIn } from './store/user';
+import { deleteUser, isAdmin, isLoggedIn } from './store/user';
 
   const products = [
     { name: "Orange Juice", desc: "Fresh & natural vitamin boost.", price: 4 },
@@ -67,6 +71,13 @@ import { deleteUser, isLoggedIn } from './store/user';
     justify-content: space-between;
     padding: 12px 24px;
     align-items: center;
+  }
+
+  .navbar-yellow {
+    background-color: darkgoldenrod;
+    text-align: center;
+    font-size: 30px;
+    color: white;
   }
 
   .nav-left {
