@@ -12,6 +12,8 @@ namespace DrinkStore.API.Endpoints
             var group = app.MapGroup("/api");
 
             group.MapPost("/sign-up", SignUpAsync);
+            group.MapGet("/users", FetchUsersAsync);//.RequireAuthorization("AdminOnly");
+            group.MapDelete("/users/{id}", DeleteUserByIdAsync);//.RequireAuthorization("AdminOnly");
         }
 
         private static async Task<IResult> SignUpAsync(DrinkStoreDbContext dbContext, ReqSignupDto dto, IConfiguration config)
@@ -41,6 +43,28 @@ namespace DrinkStore.API.Endpoints
             dbContext.Users.Add(user);
 
             await dbContext.SaveChangesAsync();
+
+            return Results.Ok();
+        }
+
+        private static async Task<IResult> FetchUsersAsync(DrinkStoreDbContext dbContext)
+        {
+            var users = await dbContext.Users.Where(x => x.Role != "Admin").Select(x => new ResUserDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Surname = x.Surname,
+                Address = x.Address,
+                Phone = x.Phone,
+                Role = x.Role,
+            }).ToListAsync();
+
+            return Results.Ok(users);
+        }
+
+        private static async Task<IResult> DeleteUserByIdAsync(DrinkStoreDbContext dbContext, int id)
+        {
+            await dbContext.Users.Where(x => x.Id == id).ExecuteDeleteAsync();
 
             return Results.Ok();
         }

@@ -1,5 +1,6 @@
 ﻿using DrinkStore.API.Db;
 using DrinkStore.API.Dto;
+using DrinkStore.API.Exceptions;
 using DrinkStore.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,7 +77,7 @@ namespace DrinkStore.API.Endpoints
         private static async Task<IResult> CreateProductAsync(DrinkStoreDbContext dbContext, ReqCreateProduct dto)
         {
             var exists = await dbContext.Products.Where(x => x.Name == dto.Name).AnyAsync();
-            if (exists) return Results.BadRequest();
+            if (exists) throw new CustomValidationException("Product with the same name already exists");
 
             var product = new Product
             {

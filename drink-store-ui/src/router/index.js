@@ -10,6 +10,7 @@ import OrdersList from '../components/OrdersList.vue'
 import OrderDetails from '../components/OrderDetails.vue'
 import AdminProduct from '../components/AdminProduct.vue'
 import AdminOrders from '../components/AdminOrders.vue'
+import AdminUsers from '../components/AdminUsers.vue'
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     path: '/admin/orders',
     name: 'AdminOrders',
     component: AdminOrders
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsers',
+    component: AdminUsers
   },
 ]
 

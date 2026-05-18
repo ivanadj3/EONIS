@@ -1,5 +1,6 @@
 ﻿using DrinkStore.API.Db;
 using DrinkStore.API.Dto;
+using DrinkStore.API.Exceptions;
 using DrinkStore.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -41,7 +42,9 @@ namespace DrinkStore.API.Endpoints
             foreach (var item in dto.Items)
             {
                 var product = await dbContext.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
-                if (product == null) throw new Exception("Product not found");
+                if (product == null) throw new CustomValidationException("Product not found");
+
+                if (product.Stock < item.Quantity) throw new CustomValidationException("Not enough quantity on stock");
 
                 var dbItem = new OrderItem()
                 {
