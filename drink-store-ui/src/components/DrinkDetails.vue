@@ -10,16 +10,12 @@
 
           <div class="info">
 
-            <h2>{{ product.title }}</h2>
+            <h2>{{ product.name }}</h2>
 
             <p class="price">{{ product.price }} din.</p>
 
-            <p class="desc">
-              {{ product.description || "Opis nije pronadjen." }}
-            </p>
-
             <div class="qty">
-              <span>Kolicina:</span>
+              <span>Količina:</span>
 
               <n-input-number
                 v-model:value="quantity"

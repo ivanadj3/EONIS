@@ -5,11 +5,11 @@
       <div class="header">
         <div>
           <h1>Moje porudzbine</h1>
-          <p>Pregled istorije porudzbina</p>
+          <p>Pregled istorije porudžbina</p>
         </div>
 
         <n-button @click="fetchOrders">
-          Ucitajte ponovo
+          Učitajte ponovo
         </n-button>
       </div>
 
@@ -17,7 +17,7 @@
 
         <n-empty
           v-if="orders.length === 0 && !loading"
-          description="Nema pronadjenih porudzbina"
+          description="Nema pronadjenih porudžbina"
         />
 
         <div
@@ -30,7 +30,7 @@
 
             <div>
               <div class="order-id">
-                Porudzbina #{{ order.id }}
+                Porudžbina #{{ order.id }}
               </div>
 
               <div class="date">
@@ -44,7 +44,7 @@
                 :type="order.paid ? 'success' : 'warning'"
                 size="large"
               >
-                {{ order.paid ? 'Placena' : 'Nije placena' }}
+                {{ order.paid ? 'Plaćena' : 'Nije plaćena' }}
               </n-tag>
 
               <div class="total">
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="meta">
-                  Kolicina: {{ item.quantity }}
+                  Količina: {{ item.quantity }}
                 </div>
               </div>
 
@@ -133,7 +133,7 @@
         } catch (e) {
             message.error(
             e.response?.data?.message ||
-            "Neuspesno ucitavanje porudzbina"
+            "Neuspešno učitavanje porudžbina"
             );
         } finally {
             loading.value = false;

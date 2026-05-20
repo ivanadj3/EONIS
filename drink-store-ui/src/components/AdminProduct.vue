@@ -239,7 +239,7 @@ const saveProduct = async () => {
       await postProductApi(form.value);
     }
 
-    message.success("Uspesno sacuvano");
+    message.success("Uspesno sačuvano");
 
     showModal.value = false;
 
@@ -247,7 +247,7 @@ const saveProduct = async () => {
   } catch (e) {
     message.error(
       e.response?.data?.message ||
-      "Neocekivana greska. Pokusajte ponovo."
+      "Neočekivana greška. Pokušajte ponovo."
     );
   } finally {
     saveLoading.value = false;
@@ -274,7 +274,7 @@ const removeProduct = (product) => {
       } catch (e) {
         message.error(
           e.response?.data?.message ||
-          "Neocekivana greska se dogodila"
+          "Neočekivana greška se dogodila"
         );
       }
     },

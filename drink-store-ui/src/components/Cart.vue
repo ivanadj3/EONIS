@@ -15,7 +15,7 @@
 
           <div class="info">
             <div class="title">{{ item.title }}</div>
-            <div class="price">$ {{ item.price }}</div>
+            <div class="price">{{ item.price }} din.</div>
           </div>
 
           <div class="qty">
@@ -27,7 +27,7 @@
           </div>
 
           <div class="subtotal">
-            $ {{ (item.price * item.quantity).toFixed(2) }}
+            {{ (item.price * item.quantity).toFixed(2) }} din.
           </div>
 
           <n-button type="error" @click="remove(item.id)">
@@ -40,13 +40,13 @@
 
         <div class="total">
           <span>Ukupan iznos:</span>
-          <strong>{{ total.toFixed(2) }}</strong>
+          <strong>{{ total.toFixed(2) }} din.</strong>
         </div>
 
         <div class="actions">
           <n-button @click="clear">Isprazni korpu</n-button>
           <n-button type="primary" size="large" @click="checkout" :disabled="loading">
-            {{ loading ? "Ucitavanje..." : "Placanje" }}
+            {{ loading ? "Učitavanje..." : "Plaćanje" }}
           </n-button>
         </div>
 
@@ -101,13 +101,13 @@
                 items: body
             });
 
-            message.success('Porudzbina je uspesno sacuvana')
+            message.success('Porudžbina je uspesno sačuvana')
             clearCart();
 
             router.push("/pre-checkout/" + res.orderId);
         } catch (e) {
             console.log(e)
-            message.error(e.response?.data?.message || "Neocekivana greska")
+            message.error(e.response?.data?.message || "Neočekivana greška")
         } finally {
             loading.value = false;
         }

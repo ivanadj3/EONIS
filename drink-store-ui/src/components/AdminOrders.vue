@@ -4,7 +4,7 @@
 
       <div class="header">
         <div>
-          <h1>Administracija porudzbina</h1>
+          <h1>Administracija porudžbina</h1>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ const removeOrder = (order) => {
       } catch (e) {
         message.error(
           e.response?.data?.message ||
-          "Neocekivana greska se dogodila"
+          "Neočekivana greška se dogodila"
         );
       }
     },
@@ -105,7 +105,7 @@ const columns = [
     },
   },
   {
-    title: "Placeno",
+    title: "Plaćeno",
     key: "paid",
 
     render(row) {

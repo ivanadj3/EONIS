@@ -30,7 +30,7 @@
           :disabled="!isFormValid || loading"
           @click="handleLogin"
         >
-          {{ loading ? "Ucitavanje..." : "Login" }}
+          {{ loading ? "Učitavanje..." : "Login" }}
         </n-button>
 
       </n-form>

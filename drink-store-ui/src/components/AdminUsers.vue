@@ -76,7 +76,7 @@ const removeUser = (user) => {
       } catch (e) {
         message.error(
           e.response?.data?.message ||
-          "Neocekivana greska se dogodila"
+          "Neočekivana greška se dogodila"
         );
       }
     },

@@ -61,8 +61,8 @@
 
   const sortOptions = [
     { label: "-", value: "-" },
-    { label: "Cena: rastuce", value: "asc" },
-    { label: "Cena: opadajuce", value: "desc" }
+    { label: "Cena: rastuće", value: "asc" },
+    { label: "Cena: opadajuće", value: "desc" }
   ];
 
   const products = ref([]);

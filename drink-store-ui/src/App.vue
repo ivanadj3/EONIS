@@ -4,13 +4,13 @@
      <div v-if="isLoggedIn() && isAdmin()" class="navbar-yellow">ADMIN</div>
     <n-layout-header bordered class="navbar">
       <div class="nav-left">
-        <span class="logo">🥤 DrinkStore</span>
+        <span class="logo">🥤 Piće na klik</span>
         <n-space size="large" class="nav-links">
-          <router-link to="/" class="nav-link">Pocetna strana</router-link>
-          <router-link to="/drink-list" class="nav-link">Lista pica</router-link>
-          <router-link v-if="isLoggedIn() && !isAdmin()" to="/orders/my" class="nav-link">Moje porudzbine</router-link>
+          <router-link to="/" class="nav-link">Početna strana</router-link>
+          <router-link to="/drink-list" class="nav-link">Lista pića</router-link>
+          <router-link v-if="isLoggedIn() && !isAdmin()" to="/orders/my" class="nav-link">Moje porudžbine</router-link>
           <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/products" class="nav-link">Proizvodi</router-link>
-          <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/orders" class="nav-link">Porudzbine</router-link>
+          <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/orders" class="nav-link">Porudžbine</router-link>
           <router-link v-if="isLoggedIn() && isAdmin()" to="/admin/users" class="nav-link">Korisnici</router-link>
         </n-space>
       </div>

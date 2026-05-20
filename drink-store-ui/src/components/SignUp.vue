@@ -54,7 +54,7 @@
           :disabled="!isFormValid || loading"
           @click="handleSignUp"
         >
-          {{ loading ? "Ucitavanje..." : "Registracija" }}
+          {{ loading ? "Učitavanje..." : "Registracija" }}
         </n-button>
 
       </n-form>

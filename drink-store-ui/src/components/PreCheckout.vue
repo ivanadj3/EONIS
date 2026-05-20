@@ -7,19 +7,19 @@
         ✅
       </div>
 
-      <h1 v-if="!hideOrderCreatedText">Porudzbina je kreirana!</h1>
+      <h1 v-if="!hideOrderCreatedText">Porudžbina je kreirana!</h1>
 
       <p class="text" v-if="!hideOrderCreatedText">
-        Vasa porudzbina je uspesno sacuvana.
+        Vasa porudžbina je uspešno sačuvana.
       </p>
 
       <p class="text">
-        Klikom na dugme, bicete preusmereni na Stripe gateway za placanje.
+        Klikom na dugme, bićete preusmereni na Stripe gateway za plaćanje.
       </p>
 
       <div class="note">
-        Placanje je moguce izvrsiti i na stranici za pregled porudzbina. 
-        Ukoliko ne izvrsite placanje u roku od 3 dana, administratori ce obrisati Vasu porudzbinu.
+        Plaćanje je moguce izvrsiti i na stranici za pregled porudžbina. 
+        Ukoliko ne izvrsite plaćanje u roku od 3 dana, administratori ce obrisati Vašu porudzbinu.
       </div>
 
       <div class="summary">
@@ -53,7 +53,7 @@
           :disabled="loading"
           @click="goToStripe"
         >
-          Nastavite na placanje
+          Nastavite na plaćanje
         </n-button>
 
       </div>
@@ -88,7 +88,7 @@
         } catch (e) {
             message.error(
             e.response?.data?.message ||
-            "Neuspesno ucitavanje "
+            "Neuspesno učitavanje "
             );
         } finally {
             loading.value = false;
@@ -110,7 +110,7 @@
             
             window.location.href = url;
         } catch (e) {
-            message.error(e.response?.data?.message || "Neocekivana greska");
+            message.error(e.response?.data?.message || "Neočekivana greška");
         } finally {
             loading.value = false;
       }

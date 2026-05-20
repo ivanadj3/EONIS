@@ -6,7 +6,7 @@
 
         <div class="header">
           <div>
-            <h1>Porudzbina #{{ order.id }}</h1>
+            <h1>Porudžbina #{{ order.id }}</h1>
 
             <div class="date">
               {{ formatDate( order.createdAt )}}
@@ -17,7 +17,7 @@
             :type="order.isPaid ? 'success' : 'warning'"
             size="large"
           >
-            {{ order.isPaid ? 'Placena' : 'Nije placena' }}
+            {{ order.isPaid ? 'Plaćena' : 'Nije plaćena' }}
           </n-tag>
         </div>
 
@@ -66,7 +66,7 @@
               </div>
 
               <div class="meta">
-                Kolicina: {{ item.quantity }}
+                Količina: {{ item.quantity }}
               </div>
             </div>
 
@@ -85,7 +85,7 @@
         <div class="section">
 
           <div class="section-title">
-            Podaci o placanju
+            Podaci o plaćanju
           </div>
 
           <div class="summary">
@@ -105,7 +105,7 @@
             secondary
             @click="$router.push('/orders/my')"
           >
-            Lista porudzbina
+            Lista porudžbina
           </n-button>
 
         </div>
