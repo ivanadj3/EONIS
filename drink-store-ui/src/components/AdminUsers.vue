@@ -18,6 +18,68 @@
 
     </n-card>
   </div>
+
+  <n-modal
+    v-model:show="resetModal"
+    preset="card"
+    title="Reset Password"
+    style="width: 500px"
+  >
+
+  <n-form
+    ref="resetFormRef"
+    :model="resetForm"
+    :rules="resetRules"
+    label-placement="top"
+  >
+
+    <n-form-item
+      label="Nova lozinka"
+      path="password"
+    >
+      <n-input
+        v-model:value="resetForm.password"
+        type="password"
+        placeholder=""
+      />
+    </n-form-item>
+
+    <n-form-item
+      label="Potvrda lozinke"
+      path="confirmPassword"
+    >
+      <n-input
+        v-model:value="resetForm.confirmPassword"
+        type="password"
+        placeholder=""
+      />
+    </n-form-item>
+
+  </n-form>
+
+  <template #footer>
+
+    <div class="modal-actions">
+
+      <n-button
+        @click="resetModal = false"
+      >
+        Odustanite
+      </n-button>
+
+      <n-button
+        type="primary"
+        :loading="resetLoading"
+        @click="resetPassword"
+      >
+        Promenite lozinku
+      </n-button>
+
+    </div>
+
+  </template>
+
+</n-modal>
 </template>
 
 <script setup>
@@ -28,7 +90,7 @@ import {
   useDialog,
   useMessage,
 } from "naive-ui";
-import { deleteUserByIdApi, fetchUsersApi } from "../api/users.api";
+import { changePasswordApi, deleteUserByIdApi, fetchUsersApi } from "../api/users.api";
 
 const message = useMessage();
 
@@ -38,6 +100,50 @@ const saveLoading = ref(false);
 const users = ref([]);
 
 const dialog = useDialog();
+
+const resetModal = ref(false);
+const selectedUser = ref(null);
+const resetLoading = ref(false);
+const resetFormRef = ref(null);
+const resetForm = ref({
+  password: "",
+  confirmPassword: "",
+});
+
+const resetRules = {
+  password: [
+    {
+      required: true,
+      message: "Obavezno polje",
+      trigger: "blur",
+    },
+    {
+      min: 6,
+      message: "Minimum 6 karaktera",
+      trigger: "blur",
+    },
+  ],
+
+  confirmPassword: [
+    {
+      required: true,
+      message: "Obavezno polje",
+      trigger: "blur",
+    },
+
+    {
+      validator(_, value) {
+        return (
+          value === resetForm.value.password
+        );
+      },
+
+      message: "Lozinke se ne poklapaju",
+
+      trigger: ["blur", "input"],
+    },
+  ],
+};
 
 const fetchUsers = async () => {
   loading.value = true;
@@ -83,6 +189,49 @@ const removeUser = (user) => {
   });
 };
 
+const openChangePasswordModal = (user) => {
+  selectedUser.value = user;
+
+  resetForm.value = {
+    password: "",
+    confirmPassword: "",
+  };
+
+  resetModal.value = true;
+}
+
+const resetPassword = async () => {
+
+  await resetFormRef.value?.validate();
+
+  resetLoading.value = true;
+
+  try {
+
+    await changePasswordApi({
+        userId: selectedUser.value.id,
+        password: resetForm.value.password,
+      })
+
+    message.success(
+      "Lozinka je uspešno promenjena"
+    );
+
+    resetModal.value = false;
+
+  } catch (e) {
+
+    message.error(
+      e.response?.data?.message ||
+      "Promena lozinke nije uspela. Pokušajte ponovo"
+    );
+
+  } finally {
+
+    resetLoading.value = false;
+  }
+};
+
 const columns = [
   {
     title: "Ime",
@@ -126,6 +275,15 @@ const columns = [
               onClick: () => removeUser(row),
             },
             { default: () => "Brisanje" }
+          ),
+          h(
+            NButton,
+            {
+              type: "primary",
+              ghost: true,
+              onClick: () => openChangePasswordModal(row),
+            },
+            { default: () => "Promena lozinke" }
           ),
         ]
       );

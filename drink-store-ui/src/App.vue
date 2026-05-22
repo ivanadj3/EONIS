@@ -41,7 +41,10 @@
 import { computed } from 'vue';
 import { cartItems } from './store/cart';
 import { deleteUser, isAdmin, isLoggedIn } from './store/user';
+import { useRouter } from 'vue-router';
 
+  const router = useRouter()
+  
   const products = [
     { name: "Orange Juice", desc: "Fresh & natural vitamin boost.", price: 4 },
     { name: "Iced Coffee", desc: "Cold brew for energy lovers.", price: 5 },
@@ -57,6 +60,7 @@ import { deleteUser, isAdmin, isLoggedIn } from './store/user';
 
   const handleLogout = () => {
     deleteUser();
+    router.push('/')
   }
 
 </script>

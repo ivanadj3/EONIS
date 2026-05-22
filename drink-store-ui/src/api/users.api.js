@@ -23,3 +23,12 @@ export const deleteUserByIdApi = async (id) => {
     });
   return data;
 };
+
+export const changePasswordApi = async (body) => {
+  const { data } = await http.post("/change-password", body, {
+      headers: {
+          Authorization: `Bearer ${user.value.jwt}`
+      }
+    });
+  return data;
+};

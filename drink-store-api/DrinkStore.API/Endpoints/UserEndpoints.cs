@@ -12,8 +12,9 @@ namespace DrinkStore.API.Endpoints
             var group = app.MapGroup("/api");
 
             group.MapPost("/sign-up", SignUpAsync);
-            group.MapGet("/users", FetchUsersAsync);//.RequireAuthorization("AdminOnly");
-            group.MapDelete("/users/{id}", DeleteUserByIdAsync);//.RequireAuthorization("AdminOnly");
+            group.MapGet("/users", FetchUsersAsync).RequireAuthorization("AdminOnly");
+            group.MapDelete("/users/{id}", DeleteUserByIdAsync).RequireAuthorization("AdminOnly");
+            group.MapPost("/change-password", ChangePasswordAsync).RequireAuthorization("AdminOnly");
         }
 
         private static async Task<IResult> SignUpAsync(DrinkStoreDbContext dbContext, ReqSignupDto dto, IConfiguration config)
@@ -65,6 +66,27 @@ namespace DrinkStore.API.Endpoints
         private static async Task<IResult> DeleteUserByIdAsync(DrinkStoreDbContext dbContext, int id)
         {
             await dbContext.Users.Where(x => x.Id == id).ExecuteDeleteAsync();
+
+            return Results.Ok();
+        }
+
+        private static async Task<IResult> ChangePasswordAsync(DrinkStoreDbContext dbContext, ChangePasswordReq dto, IConfiguration config)
+        {
+            var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+
+            if (user == null)
+            {
+                return Results.BadRequest(new
+                {
+                    message = "User not found"
+                });
+            }
+
+            var hash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            user.PasswordHash = hash;
+
+            await dbContext.SaveChangesAsync();
 
             return Results.Ok();
         }
