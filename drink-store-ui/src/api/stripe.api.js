@@ -1,3 +1,4 @@
+import { user } from "../store/user";
 import { http } from "./http";
 
 export const createCheckoutSessionApi = async (params) => {

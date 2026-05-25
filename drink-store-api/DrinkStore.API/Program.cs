@@ -1,5 +1,6 @@
 using DrinkStore.API.Db;
 using DrinkStore.API.Endpoints;
+using DrinkStore.API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +72,8 @@ app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapOrderEndpoints();
 app.MapAStripeEndpoints();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

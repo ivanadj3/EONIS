@@ -35,31 +35,44 @@ namespace DrinkStore.API.Endpoints
                 Address = user.Address
             };
 
-            var createdOrder = await dbContext.Orders.AddAsync(order);
-            await dbContext.SaveChangesAsync();
+            using var transaction = await dbContext.Database.BeginTransactionAsync();
 
-            var dbItems = new List<OrderItem>();
-            foreach (var item in dto.Items)
+            try
             {
-                var product = await dbContext.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
-                if (product == null) throw new CustomValidationException("Product not found");
 
-                if (product.Stock < item.Quantity) throw new CustomValidationException("Not enough quantity on stock");
+                var createdOrder = await dbContext.Orders.AddAsync(order);
+                await dbContext.SaveChangesAsync();
 
-                var dbItem = new OrderItem()
+                var dbItems = new List<OrderItem>();
+                foreach (var item in dto.Items)
                 {
-                    Order = order,
-                    ProductId = item.ProductId,
-                    ProductName = product.Name,
-                    Quantity = item.Quantity,
-                    TotalPrice = product.Price * item.Quantity
-                };
+                    var product = await dbContext.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
+                    if (product == null) throw new CustomValidationException("Product not found");
 
-                dbItems.Add(dbItem);
+                    if (product.Stock < item.Quantity) throw new CustomValidationException($"Nema dovoljno komada '{product.Name}' na zalihama. Dostupno je {product.Stock} komada ");
+
+                    var dbItem = new OrderItem()
+                    {
+                        Order = order,
+                        ProductId = item.ProductId,
+                        ProductName = product.Name,
+                        Quantity = item.Quantity,
+                        TotalPrice = product.Price * item.Quantity
+                    };
+
+                    dbItems.Add(dbItem);
+                }
+
+                await dbContext.AddRangeAsync(dbItems);
+                await dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
             }
-
-            await dbContext.AddRangeAsync(dbItems);
-            await dbContext.SaveChangesAsync();
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
 
             return Results.Ok(new
             {
@@ -99,9 +112,11 @@ namespace DrinkStore.API.Endpoints
         {
             var userId = claimsPrincipal.FindFirstValue(
                ClaimTypes.NameIdentifier
-           );
+            );
 
-            var order = await dbContext.Orders.Include(x => x.Items).Include(x => x.User).Where(x => x.Id == id && x.User.Id == int.Parse(userId)).Select(x => new ResOrder
+            var role = claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+
+            var order = await dbContext.Orders.Include(x => x.Items).Include(x => x.User).Where(x => x.Id == id && (x.User.Id == int.Parse(userId) || role == "Admin")).Select(x => new ResOrder
             {
                 Id = x.Id,
                 Paid = x.Paid,
@@ -134,7 +149,7 @@ namespace DrinkStore.API.Endpoints
                ClaimTypes.NameIdentifier
            );
 
-            var orders = await dbContext.Orders.Include(x => x.Items).OrderByDescending(x => x.Id).Select(x => new ResOrder
+            var orders = await dbContext.Orders.Include(x => x.Items).Include(x => x.User).OrderByDescending(x => x.Id).Select(x => new ResOrder
             {
                 Id = x.Id,
                 Paid = x.Paid,
@@ -148,6 +163,7 @@ namespace DrinkStore.API.Endpoints
                     Quantity = x.Quantity,
                     TotalPrice = x.TotalPrice
                 }),
+                User = x.User.Name + " " + x.User.Surname,
                 Deleteable = !x.Paid && DateTime.UtcNow > x.CreatedAt.AddDays(3)
             }).ToListAsync();
 

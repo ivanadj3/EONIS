@@ -31,7 +31,7 @@ namespace DrinkStore.API.Endpoints
             var frontendUrl = context.Request.Headers.Origin.ToString();
             var options = new SessionCreateOptions
             {
-                SuccessUrl = $"{frontendUrl}/order/{dto.OrderId}",
+                SuccessUrl = $"{frontendUrl}/orders/{dto.OrderId}",
                 CancelUrl = $"{frontendUrl}/",
                 PaymentMethodTypes = new List<string>
                 {

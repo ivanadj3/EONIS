@@ -110,6 +110,7 @@
             
             window.location.href = url;
         } catch (e) {
+          console.log(e)
             message.error(e.response?.data?.message || "Neočekivana greška");
         } finally {
             loading.value = false;

@@ -14,7 +14,7 @@
           <img :src="item.image" class="img" />
 
           <div class="info">
-            <div class="title">{{ item.title }}</div>
+            <div class="title">{{ item.name }}</div>
             <div class="price">{{ item.price }} din.</div>
           </div>
 
@@ -106,7 +106,6 @@
 
             router.push("/pre-checkout/" + res.orderId);
         } catch (e) {
-            console.log(e)
             message.error(e.response?.data?.message || "Neočekivana greška")
         } finally {
             loading.value = false;

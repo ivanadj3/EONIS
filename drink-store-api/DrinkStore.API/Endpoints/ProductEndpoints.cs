@@ -20,7 +20,7 @@ namespace DrinkStore.API.Endpoints
             group.MapPut("/{id}", UpdateProductAsync).RequireAuthorization("AdminOnly");
         }
 
-        private static async Task<IResult> GetProductsAsync(DrinkStoreDbContext dbContext, string? search = null, string sortBy = "Name", string sort = "asc", int pageSize = 10, int page = 1)
+        private static async Task<IResult> GetProductsAsync(DrinkStoreDbContext dbContext, string? search = null, string sortBy = "Name", string sort = "asc", int pageSize = int.MaxValue, int page = 1)
         {
             var query = dbContext.Products.AsQueryable();
 

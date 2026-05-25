@@ -29,8 +29,10 @@ import {
   useMessage,
 } from "naive-ui";
 import { deleteOrderByIdApi, getOrdersAdminApi } from "../api/order.api";
+import { useRouter } from "vue-router";
 
 const message = useMessage();
+const router = useRouter();
 
 const loading = ref(false);
 const saveLoading = ref(false);
@@ -83,10 +85,18 @@ const removeOrder = (order) => {
   });
 };
 
+const viewDetails = (id) => {
+  router.push(`/orders/${id}`);
+};
+
 const columns = [
   {
     title: "ID",
     key: "id",
+  },
+  {
+    title: "Kupac",
+    key: "user",
   },
   {
     title: "Datum",
@@ -126,6 +136,15 @@ const columns = [
           },
         },
         [
+          h(
+            NButton,
+            {
+              type: "primary",
+              ghost: true,
+              onClick: () => viewDetails(row.id),
+            },
+            { default: () => "Detalji porudzbine" }
+          ),
           h(
             NButton,
             {

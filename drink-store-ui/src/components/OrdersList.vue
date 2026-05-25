@@ -48,7 +48,7 @@
               </n-tag>
 
               <div class="total">
-                {{ order.totalAmount.toFixed(2) }}
+                {{ order.totalAmount.toFixed(2) }} din.
               </div>
 
             </div>
@@ -74,7 +74,7 @@
               </div>
 
               <div class="price">
-                {{ item.totalPrice.toFixed(2) }}
+                {{ item.totalPrice.toFixed(2) }} din.
               </div>
 
             </div>

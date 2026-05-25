@@ -2,7 +2,7 @@
   <div class="page">
     <n-card class="card">
       
-      <div class="logo">🥤 DrinkStore</div>
+      <div class="logo">🥤 Piće na klik</div>
 
       <n-form
         ref="formRef"

@@ -14,10 +14,10 @@
           </div>
 
           <n-tag
-            :type="order.isPaid ? 'success' : 'warning'"
+            :type="order.paid ? 'success' : 'warning'"
             size="large"
           >
-            {{ order.isPaid ? 'Plaćena' : 'Nije plaćena' }}
+            {{ order.paid ? 'Plaćena' : 'Nije plaćena' }}
           </n-tag>
         </div>
 
