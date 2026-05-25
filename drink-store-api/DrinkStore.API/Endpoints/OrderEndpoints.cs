@@ -32,7 +32,9 @@ namespace DrinkStore.API.Endpoints
             {
                 CreatedAt = DateTime.UtcNow,
                 User = user,
-                Address = user.Address
+                Address = user.Address,
+                Phone = user.Phone,
+                UserName = user.Name + " " + user.Surname
             };
 
             using var transaction = await dbContext.Database.BeginTransactionAsync();
@@ -131,8 +133,8 @@ namespace DrinkStore.API.Endpoints
                     TotalPrice = x.TotalPrice
                 }),
                 Address = x.Address,
-                User = x.User.Name + " " + x.User.Surname,
-                Phone = x.User.Phone
+                User = x.UserName,
+                Phone = x.Phone
             }).FirstOrDefaultAsync();
 
             if (order == null) return Results.BadRequest();
@@ -163,7 +165,7 @@ namespace DrinkStore.API.Endpoints
                     Quantity = x.Quantity,
                     TotalPrice = x.TotalPrice
                 }),
-                User = x.User.Name + " " + x.User.Surname,
+                User = x.UserName,
                 Deleteable = !x.Paid && DateTime.UtcNow > x.CreatedAt.AddDays(3)
             }).ToListAsync();
 

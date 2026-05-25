@@ -65,6 +65,7 @@ namespace DrinkStore.API.Endpoints
 
         private static async Task<IResult> DeleteUserByIdAsync(DrinkStoreDbContext dbContext, int id)
         {
+            await dbContext.Orders.Where(x => x.User.Id == id).ExecuteUpdateAsync(x => x.SetProperty(a => a.User, b => null));
             await dbContext.Users.Where(x => x.Id == id).ExecuteDeleteAsync();
 
             return Results.Ok();
