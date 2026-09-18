@@ -1,1 +1,1 @@
-# EONIS
+# DrinkStore is a full-stack web application designed for managing a beverage store. The project was developed using Vue.js for the frontend, .NET Web API for the backend, and PostgreSQL for data storage. It includes product management, REST API integration, database operations, and a responsive user interface. The project demonstrates experience with full-stack development, relational databases, API communication, and integration of frontend and backend components.
